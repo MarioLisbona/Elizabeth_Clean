@@ -1,0 +1,40 @@
+{% paginate blog.articles by section.settings.number_of_posts %}
+  {% for article in blog.articles %}
+    <div>
+      {% if article.image %}
+        <img
+          src="{{ article.image | img_url: 'medium'}}"
+          alt="{{ article.image.alt }}"
+          height="50"
+          width="100"
+          loading="eager"
+        >
+      {% else %}
+        {% assign placeholder_image = 'lifestyle-2' %}
+        {{ placeholder_image | placeholder_svg_tag: 'w-20 h-20' }}
+      {% endif %}
+      <h1>{{ article.title }}</h1>
+      {% if article.excerpt.size > 0 %}
+      {% else %}
+        <p>{{ article.content | strip_html | truncatewords: 15, '...' }}</p>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "blog",
+  "settings": [
+    {
+      "type": "range",
+      "id": "number_of_posts",
+      "step": 1,
+      "min": 1,
+      "max": 6,
+      "label": "NUmber of posts to display",
+      "default": 3
+    }
+  ]
+}
+{% endschema %}
